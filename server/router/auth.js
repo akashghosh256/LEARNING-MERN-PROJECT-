@@ -1,6 +1,8 @@
 const express = require('express');
-
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 
 //connecting to db for registering users and also checking its a new user
 require('../db/conn');
@@ -10,7 +12,10 @@ router.get('/', (req,res) => {
     res.send('hello from express router auth.js');
 })
 
-// Using Promises
+
+// Registration route -------------------------------------------
+
+// Using Promises----------------------------------------------------------------------------------------------------------------------
 
 // // To get data from frontend always do same
 // router.post('/register',(req,res) =>{
@@ -46,7 +51,9 @@ router.get('/', (req,res) => {
 
 // });
 
-//Using Async and await
+
+
+//Using Async and await-----------------------------------------------------------------------------------------------------------------------------------
 
 // To get data from frontend always do same
 router.post('/register', async (req,res) =>{
@@ -64,11 +71,27 @@ router.post('/register', async (req,res) =>{
     //already a user exists with same email
     return res.status(422).json({error:" Email already exist"});
 }
+else if( password != cpassword){
+    return res.status(422).json({error:" password not matching to cpassword"});
+ 
+}
+else{
+
+
 
 
 const user = new User({name, email, phone, work, password, cpassword});
+//----------------------------------------------------------------MIDDLEWARE-----------------------------------------------------------------------
+// here we will call a function for hashing password and cpassword before adding it to database
+// and before saving, act as a middleware 
+// function is written in userSchema.js and it will automatically get called from there
+
+
 // const userRegister = await user.save();
-await user.save();
+const userRegister =await user.save();
+console.log(`${user} user registered bro`);
+console.log(userRegister);
+
 res.status(201).json({message:"user registerd succesfully"});
 
 
@@ -79,17 +102,91 @@ res.status(201).json({message:"user registerd succesfully"});
 
 // }
 
-    }
+    }}
     catch(err){
 console.log(err);
     }
     
-    
-
-    
-
-    
     });
+
+// login/singIn route------------------------------------------------
+
+router.post('/signin', async (req,res) =>{
+    // console.log(req.body);
+    // res.json({message:"logging in"});
+    try {
+const {email, password} = req.body;
+
+if( !email || !password){
+    return res.status(400).json({error:"plz fill data"}); //both email and password should be filled for login
+}
+
+
+
+
+const userLogin = await User.findOne({email : email}); //verifying email from mongo if it already exist in db
+
+// video 14
+if(userLogin){
+
+    // verifying password 
+const isMatch = await bcrypt.compare(password, userLogin.password);
+
+// const token = await userLogin.generateAuthToken();
+// console.log(token);
+
+if(!isMatch){
+    // invalid password
+    res.status(400).json({error:"Invalid Credentials"});
+}
+else{
+
+ //   res.json({message:"user password matched"}); 
+ 
+// The "Cannot set headers after they are sent to the client" error in Node.js typically occurs when you try to 
+// send a response to the client after you've already sent a response. This usually happens when you attempt to
+//  send multiple responses for a single HTTP request. In Express, the response is sent to the client with methods 
+//  like res.send(), res.json(), or res.end().
+
+
+// token should be generated only when signin is successfull
+ const token = await userLogin.generateAuthToken();  //getting token from userSchema.js
+// video 16 
+res.cookie("mernjwttoken", token,{
+    expires: new Date(Date.now() + 300000), //5 min
+    httpOnly:true
+});
+
+ res.json({ message: "user signin successfull"});
+ console.log(userLogin);
+
+//console.log("token generated",token);
+}}
+else{
+    //invalid email
+    res.status(400).json({error:"Invalid Credentials"});
+}
+
+// console.log(userLogin);
+// if(!userLogin){
+// res.status(400).json({ error: "user signin error"});
+// }
+// else{
+//     res.json({ message: "user signin successfull"});
+// }
+
+}
+catch(err){
+console.log(err);
+        }
+});
+
+
+
+
+
+
+
 
 
 module.exports = router;
@@ -100,3 +197,14 @@ module.exports = router;
 
 
 
+
+
+
+
+
+
+
+// {
+//     "email":"harsh@gmail.com",
+//    "password": "asdfgh"
+// }
