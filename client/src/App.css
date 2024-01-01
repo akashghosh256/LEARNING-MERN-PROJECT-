@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,39 @@
   to {
     transform: rotate(360deg);
   }
+} */
+/* Change background color of the entire page */
+body {
+  background-color: #f0f0f0;
+}
+
+/* Update text alignment and font styles */
+.App {
+  text-align: left;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Adjust logo size and styling */
+.App-logo {
+  height: 60vmin;
+  animation: App-logo-spin infinite 10s linear;
+}
+
+/* Change header styles */
+.App-header {
+  background-color: #007bff; /* Change to a blue color */
+  min-height: 80vh;
+  color: #fff; /* Change text color to white */
+}
+
+/* Update link styles */
+.App-link {
+  color: #28a745; /* Change link color to green */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Add bold font weight */
+}
+
+/* Add some padding to the entire page */
+body {
+  padding: 20px;
 }
