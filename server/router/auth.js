@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const authenticate = require('../middleware/authenticate');
+const cookieParser = require("cookie-parser");
+router.use(cookieParser());
 
 //connecting to db for registering users and also checking its a new user
 require('../db/conn');
 const User = require("../models/userSchema");
 
 router.get('/', (req,res) => {
-    res.send('hello from express router auth.js');
+    res.send('hello from express sever-router auth.js');
 })
 
 
@@ -153,7 +155,7 @@ else{
  const token = await userLogin.generateAuthToken();  //getting token from userSchema.js
 // video 16 
 res.cookie("mernjwttoken", token,{
-    expires: new Date(Date.now() + 300000), //5 min
+    expires: new Date(Date.now() + 30000000), //time in min
     httpOnly:true
 });
 
@@ -182,8 +184,19 @@ console.log(err);
 });
 
 
+// About us ka page for authentication video 32
+
+router.get('/about',authenticate , (req,res) => {
+    console.log('about server hi from auth js');
+    res.send(req.rootUser);
+});
 
 
+// this path is for both contact and home page
+router.get('/getdata',authenticate , (req,res) => {
+    console.log('getting data from auth js');
+    res.send(req.rootUser);
+});
 
 
 

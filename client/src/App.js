@@ -5,7 +5,7 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-
+import Errorpage from "./components/Errorpage"; 
 import {Routes, Route} from 'react-router-dom';
 import "./App.css";
 
@@ -33,6 +33,9 @@ const App = () => {
 <Signup/>
  </div> </>} />
 
+ {/* Add a generic catch-all route for 404 errors */}
+ <Route path="*" element={<><Navbar /><div className='container'><Errorpage /></div></>} />
+     
 
 
 </Routes>
