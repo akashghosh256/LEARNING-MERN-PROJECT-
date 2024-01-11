@@ -36,9 +36,11 @@ app.use(require('./router/auth'));
 //     res.send('about you................');
 // })
 
-app.get('/contact', (req,res) => {
-    res.send('contact');
-})
+
+//    “/contact” moved to server/router/auth.js
+// app.get('/contact', (req,res) => {
+//     res.send('contact');
+// })
 
 
 //console.log('beeeeeeeeeees');

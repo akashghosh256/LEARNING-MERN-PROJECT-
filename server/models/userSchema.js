@@ -35,6 +35,33 @@ work:{
         type: String,
         required : true
     },
+    date:{
+ type: Date,
+ default :Date.now   //puts current date
+    },
+
+messages:[{
+            name :{
+                type : String,
+                required : true
+            },
+
+            email: {
+                type: String,
+                required : true
+            },
+
+            phone: {
+                type: Number,
+                required : true
+            },
+            message:{
+                type:String,
+                required:true
+
+        }
+
+    }],
 
     tokens : [
         {
@@ -44,6 +71,8 @@ work:{
             }
         }
     ]
+
+
 
 })
 
@@ -77,6 +106,22 @@ return token;
         console.log(err);
     }
 }
+
+
+//stored the message
+userSchema.methods.addMessage = async function(name, email, phone, message){
+try{
+this.messages = this.messages.concat({ name, email, phone, message});
+await this.save(); //saving in db
+return this.messages;  // for checking something have happend
+
+}
+catch(error){
+console.log(error);
+}
+}
+
+
 
 const User = mongoose.model('USER',userSchema);
 

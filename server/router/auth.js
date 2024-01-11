@@ -199,6 +199,27 @@ router.get('/getdata',authenticate , (req,res) => {
 });
 
 
+// contact us page backend video 36 18:00
+router.post('/contact', authenticate, async (req,res) =>{
+try{
+   const {name, email, phone, message} =  req.body;
+   if( !name || !email || !phone || !message){  //if any field is
+   console.log("please fill all the fields ");
+   return res.status(422).json({error:" fill all the fields"});
+   }
+
+   const userContact = await User.findOne({_id:req.userID});
+   if(userContact){
+    const userMessage = await  userContact.addMessage(name,email,phone,message);
+    await userContact.save();
+    res.status(201).json({mesage:"user contact successfully"});
+   }
+
+}
+catch(error){
+console.log("Contact form error ----------> ",error);
+}
+})
 
 
 
@@ -216,8 +237,3 @@ module.exports = router;
 
 
 
-
-// {
-//     "email":"harsh@gmail.com",
-//    "password": "asdfgh"
-// }

@@ -52,8 +52,50 @@ const handleInputs = (e) => {
   const name = e.target.name;
   const value = e.target.value;
 
-  setUserData({...userData, name:userData.name, email:userData.email, phone:userData.phone});
+  setUserData({...userData,[name]:value }); // (key : value) getting dynamic data from text box
 }
+// send the data to backend  11:40
+
+const contactForm = async (e) => {
+  e.preventDefault();  // prevents page from refreshing
+ const {name, email, phone, message} = userData;
+  const res = await fetch('/contact', {
+    method : "POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      name, email, phone, message
+    })
+  });
+
+  //15:43
+
+  // const data = await res.json();
+
+  // if(!data){
+  //   console.log("messsage not send ");
+  // }else{
+  //   alert("Message Send");
+  //   setUserData({...userData, message:""});
+  // }
+
+  if (!res.ok) {
+    const errorMessage = await res.text();
+    console.log("Error:", errorMessage);
+    window.alert(errorMessage);
+    console.log("Invalid Regist", errorMessage);
+  } else {
+    const resp = await res.json();
+    console.log("response-----------", resp);
+    window.alert("Successful message");
+    console.log("Successful message");
+    setUserData({...userData, message:""});
+   
+  }
+
+}
+
 
 
 
@@ -85,10 +127,12 @@ const handleInputs = (e) => {
       <div className="row mt-5">
         <div className="col-md-8 offset-md-2">
           <h2 className="text-center mb-4">Get in Touch</h2>
-          <form>
+          <form method="POST">
             <div className="form-group">
               <label htmlFor="name">Name:</label>
               <input type="text" className="form-control" id="name"
+              name="name"
+              value={userData.name}
               onChange={handleInputs}
               placeholder="Enter your name" required />
             </div>
@@ -96,6 +140,8 @@ const handleInputs = (e) => {
             <div className="form-group">
               <label htmlFor="email">Email:</label>
               <input type="email" className="form-control" id="email"
+              name="email"
+              value={userData.email}
               onChange={handleInputs}
               placeholder="Enter your email" required />
             </div>
@@ -103,19 +149,24 @@ const handleInputs = (e) => {
             <div className="form-group">
               <label htmlFor="phone">Phone Number:</label>
               <input type="tel" className="form-control" id="phone" placeholder="Enter your phone number"
+              name="phone"
+              value={userData.phone}
               onChange={handleInputs}
               required />
             </div>
 
             <div className="form-group">
               <label htmlFor="message">Message:</label>
-              <textarea className="form-control" id="message"  
+              <textarea className="form-control" id="message"
+              name="message"  
               value={userData.message}
               onChange={handleInputs}
               rows="4" placeholder="Enter your message" required></textarea>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-block">Send Message</button>
+            <button type="submit" className="btn btn-primary btn-block"
+            onClick={contactForm}
+            >Send Message</button>
           </form>
         </div>
       </div>
