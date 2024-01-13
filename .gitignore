@@ -3,7 +3,9 @@
 
 
 # Save Private config.env
-.env
+# .gitignore
+config.env
+
 
 # Logs
 logs
