@@ -219,7 +219,28 @@ try{
 catch(error){
 console.log("Contact form error ----------> ",error);
 }
-})
+});
+
+// logout video 38
+// router.get('/logout',authenticate , (req,res) => {
+//     console.log('logging out from auth js');
+//     res.clearCookie('mernjwttoken',{path:'/login'});
+//     res.status(200).send('user Logout');
+// });
+// router.get('/logout', (req, res) => {
+//     try {
+//         console.log('logging out from auth js');
+//         res.clearCookie('mernjwttoken', { path: '/login' });
+//         res.status(200).send('user Logout');
+//     } catch (error) {
+//         console.error('Error in logout route:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+router.get('/logout', (req, res) => {
+    res.clearCookie('mernjwttoken');
+    return res.status(200).redirect('/login');
+  });
 
 
 

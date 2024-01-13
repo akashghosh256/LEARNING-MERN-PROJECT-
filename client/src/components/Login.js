@@ -1,7 +1,15 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from "../App";
+
 
 const Login = () => {
+
+
+  // video 39 toggle login
+  const {state, dispatch}  = useContext(UserContext);
+
+
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
 
@@ -32,6 +40,7 @@ const Login = () => {
   } else {
     const resp = await res.json();
     console.log("response-----------", resp);
+    dispatch({type:"USER", payload:true});  // toggling 
     window.alert("Successful Login");
     console.log("Successful login");
     navigate('/');
