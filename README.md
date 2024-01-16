@@ -1,1 +1,2 @@
-# LEARNING-MERN-PROJECT-
+# MERNPlayground-
+Executed a fundamental web development project utilizing MERN (MongoDB, Express.js, React.js, and Next.js) stack. Constructed a basic web page, enhancing my understanding of MERN technologies. Implemented key features such as user authentication, login, and registration functionalities, incorporating Token-Based Authentication. Gained valuable experience in utilizing React hooks, router-dom states, and designing a userSchema for database management. Effectively managed both frontend and backend components of the project, contributing to my comprehensive learning journey in MERN technology.
